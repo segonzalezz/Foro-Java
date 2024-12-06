@@ -2,7 +2,7 @@ package org.segonzalezz.controller;
 
 import jakarta.validation.Valid;
 import org.segonzalezz.dominio.Usuario;
-import org.segonzalezz.dto.AutenticacionUsuarioDTO;
+import org.segonzalezz.dto.usuario.AutenticacionUsuarioDTO;
 import org.segonzalezz.infra.JWTokenDTO;
 import org.segonzalezz.infra.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,11 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity autenticarUsuario(@RequestBody @Valid AutenticacionUsuarioDTO datosAutenticacionUsuario) {
-        Authentication authToken = new UsernamePasswordAuthenticationToken(datosAutenticacionUsuario.email(),
-                datosAutenticacionUsuario.password());
+    public ResponseEntity<?> autenticarUsuario(@RequestBody @Valid AutenticacionUsuarioDTO datosAutenticacionUsuario) {
+        Authentication authToken = new UsernamePasswordAuthenticationToken(
+                datosAutenticacionUsuario.correoElectronico(),
+                datosAutenticacionUsuario.password()
+        );
         var usuarioAutenticado = authenticationManager.authenticate(authToken);
         var JWTtoken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
         return ResponseEntity.ok(new JWTokenDTO(JWTtoken));

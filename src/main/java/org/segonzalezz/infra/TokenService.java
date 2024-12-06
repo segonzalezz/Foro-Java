@@ -16,6 +16,7 @@ import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
+
     @Value("${api.security.secret}")
     private String apiSecret;
 
@@ -26,7 +27,7 @@ public class TokenService {
         try{
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
             return JWT.create()
-                    .withIssuer("alura")
+                    .withIssuer(ISSUER)
                     .withSubject(usuario.getCorreoElectronico())
                     .withClaim("id", usuario.getId())
                     .withExpiresAt(generarFechaVencimiento())
